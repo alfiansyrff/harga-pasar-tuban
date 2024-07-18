@@ -9,12 +9,24 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-table": "^8.19.3",
+    "axios": "^1.7.2",
+    "jsdom": "^24.1.0",
+    "lodash": "^4.17.21",
+    "moments": "^0.0.2",
+    "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.5"
+    "react-marquee-slider": "^1.1.5",
+    "react-paginate": "^8.2.0",
+    "styled-components": "^6.1.12",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@types/node": "20.14.11",
+    "@types/react": "18.3.3",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.1",
+    "typescript": "5.5.3"
   }
 }
