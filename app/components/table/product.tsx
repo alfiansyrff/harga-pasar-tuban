@@ -101,15 +101,15 @@ const ProductTable: React.FC<ProductTableProps> = ({ data }) => {
             pageRangeDisplayed={5}
             onPageChange={handleClick}
             containerClassName={'flex items-center justify-end mt-4 mb-2'}
-            pageClassName={'mx-1'}
+            pageClassName={'mx-[3px] md:mx-1'}
             previousClassName={''}
             nextClassName={''}
             breakClassName={''}
-            activeClassName={'text-blue-500'}
+            activeClassName={'text-blue-500 text-sm'}
             previousLinkClassName={'flex items-center rounded-full bg-gray-200 p-1.5'}
             nextLinkClassName={'flex items-center rounded-full bg-gray-200 p-1.5'}
-            pageLinkClassName={'px-2 py-1 border border-gray-300 rounded'}
-            breakLinkClassName={'px-2 py-1 border border-gray-300 rounded'}
+            pageLinkClassName={'p-1 md:px-2 md:py-1 border border-gray-300 rounded'}
+            breakLinkClassName={'p-1 md:px-2 md:py-1 border border-gray-300 rounded'}
             activeLinkClassName={'bg-blue-500 bg-opacity-20'}
           />
         </div>
