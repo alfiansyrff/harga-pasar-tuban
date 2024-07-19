@@ -14,6 +14,7 @@ const HargaForm: React.FC<HargaFormProps> = ({ handleData, handlePasar, handleTg
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const today = new Date();
+  const [data, setData] = useState([]);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,6 +37,7 @@ const HargaForm: React.FC<HargaFormProps> = ({ handleData, handlePasar, handleTg
 
       if (response.ok) {
         const data = await response.json();
+        setData(data.items);
         handleData(data.items); 
         handlePasar(pasar);
         handleTgl(tanggal);
@@ -98,11 +100,14 @@ const HargaForm: React.FC<HargaFormProps> = ({ handleData, handlePasar, handleTg
               Loading...
             </button>
           ) : (
-            <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+
+            <button type="submit" className="grid text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
               Tampilkan
-            </button>
+            </button>            
           )}
         </div>
+
+        {data.length > 0 && <p className='md:hidden text-center text-sm text-green-600'>Silakan scroll ke bawah untuk melihat hasil filter</p>}
 
       </form>
     </div>
