@@ -71,7 +71,7 @@ function UnduhMingguan() {
   
         return {
           nama: name,
-          harga_rerata: (currentPriceSum / count).toFixed(2),
+          harga_rerata: (currentPriceSum / count).toFixed(3),
         };
       });
   
