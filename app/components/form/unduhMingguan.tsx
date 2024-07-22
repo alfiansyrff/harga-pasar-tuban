@@ -1,81 +1,3 @@
-// 'use client'
-// import React, { useState } from 'react'
-
-// function UnduhMingguan() {
-
-//   const [tanggalAwal, setTanggalAwal] = useState<string>('');
-//   const [tanggalAkhir, setTanggalAkhir] = useState<string>('');
-//   const [kabkota, setKabkota] = useState<string>('tubankab');
-//   const [pasar, setPasar] = useState<string>('');
-
-//   const handlePasarChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-//     setPasar(e.target.value);
-//   };
-
-//   return (
-//     <div>
-//       <form className='bg-white rounded-2xl shadow-md p-5' >
-//         <h1 className='mb-4 border-b-2 text-xl border-blue-500'>Unduh Data</h1>
-//         <div className='mb-2 grid grid-cols-2 gap-2'>
-//           <div className='col-span-2 md:col-span-1'>
-//             <label htmlFor="tanggal" className="block mb-2 text-sm font-medium text-blue-500">Pilih Tanggal Awal</label>
-//             <div className="relative">
-//               <input
-//                 type="date"
-//                 id="tanggal"
-//                 className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-//                 value={tanggalAwal}
-//                 onChange={(e) => setTanggalAwal(e.target.value)}
-//                 required
-//                 />
-//             </div>
-//           </div>
-
-//           <div className='col-span-2 md:col-span-1'>
-//           <label htmlFor="tanggal" className="block mb-2 text-sm font-medium text-blue-500">Pilih Tanggal Akhir</label>
-//           <div className="relative">
-//             <input
-//               type="date"
-//               id="tanggal"
-//               className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-//               value={tanggalAkhir}
-//               onChange={(e) => setTanggalAkhir(e.target.value)}
-//               required
-//             />
-//           </div>
-//           {/* {error && <p className='text-[12px] text-red-500'>Tanggal tidak dapat melebihi tanggal hari ini</p>} */}
-//         </div>
-//           {/* {error && <p className='text-[12px] text-red-500'>Tanggal tidak dapat melebihi tanggal hari ini</p>} */}
-//         </div>
-
-       
-
-//         <div className='mb-4'>
-//           <label htmlFor="pasar" className="block mb-2 text-sm font-medium text-blue-500">Pilih Pasar</label>
-//           <select
-//             id="pasar"
-//             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-//             value={pasar}
-//             onChange={handlePasarChange}
-//           >
-//             <option value="">Semua Pasar</option>
-//             <option value="98">Pasar Baru Tuban</option>
-//             <option value="99">Pasar Bangilan</option>
-//             <option value="100">Pasar Jatirogo</option>
-//           </select>
-//         </div>
-
-//         <div className='flex justify-end'>
-//           <button onClick={() => alert(tanggalAkhir)} type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-//                 Unduh
-//               </button>
-//         </div>
-//       </form>
-//     </div>
-//   )
-// }
-
-// export default UnduhMingguan
 
 'use client';
 import React, { useState } from 'react';
@@ -88,6 +10,7 @@ function UnduhMingguan() {
   const [pasar, setPasar] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const [dataMingguan, setDataMingguan] = useState([]);
 
   const handlePasarChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setPasar(e.target.value);
@@ -107,9 +30,9 @@ function UnduhMingguan() {
   const fetchData = async () => {
     setLoading(true);
     setError(false);
-
+  
     const dateArray = getDateRangeArray(tanggalAwal, tanggalAkhir);
-
+  
     try {
       const results = await Promise.all(dateArray.map(async (tanggal) => {
         const response = await fetch('/api/scrape', {
@@ -119,25 +42,55 @@ function UnduhMingguan() {
           },
           body: JSON.stringify({ tanggal, kabkota, pasar }),
         });
-
+  
         if (!response.ok) {
-          throw new Error('Failed to fetch data');
+          throw new Error('Gagal');
         }
-
+  
         const data = await response.json();
         return { tanggal, items: data.items };
       }));
-
+  
+      const aggregatedData = {};
+      results.forEach(result => {
+        result.items.forEach(item => {
+          if (!aggregatedData[item.name]) {
+            aggregatedData[item.name] = { currentPrices: [], yesterdayPrices: [] };
+          }
+          aggregatedData[item.name].currentPrices.push(parseFloat(item.currentPrice.replace(",", "")));
+          aggregatedData[item.name].yesterdayPrices.push(parseFloat(item.yesterdayPrice.replace(",", "")));
+        });
+      });
+  
+      const averagedData = Object.keys(aggregatedData).map(name => {
+        const currentPrices = aggregatedData[name].currentPrices;
+        const yesterdayPrices = aggregatedData[name].yesterdayPrices;
+        const currentPriceSum = currentPrices.reduce((sum, price) => sum + price, 0);
+        const yesterdayPriceSum = yesterdayPrices.reduce((sum, price) => sum + price, 0);
+        const count = currentPrices.length;
+  
+        return {
+          nama: name,
+          harga_rerata: (currentPriceSum / count).toFixed(2),
+        };
+      });
+  
+      results.push({ tanggal: 'Rata-rata', items: averagedData });
+  
+   
       downloadExcelFile(results);
-
+  
       setLoading(false);
       setError(false);
+  
+      return results;
     } catch (error) {
       console.error('Error:', error);
       setLoading(false);
       setError(true);
     }
   };
+  
 
   return (
     <div>
@@ -212,12 +165,6 @@ function UnduhMingguan() {
             </button>
           )}
         </div>
-
-        {/* <div className='flex justify-end'>
-          <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-            Unduh
-          </button>
-        </div> */}
 
         {error && <p className='text-red-500'>Terjadi Kesalahan. Silakan coba lagi</p>}
       </form>

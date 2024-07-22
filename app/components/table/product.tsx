@@ -5,7 +5,6 @@ import ReactPaginate from 'react-paginate';
 import IconChevronLeft from '../icons/chevron-left';
 import IconChevronRight from '../icons/chevron-right';
 import IconDownload from '../icons/download';
-import generateExcelData from '../../helper/ExcelDataGenerator';
 import downloadExcelFile from '../../helper/downloadExcel';
 
 interface ProductTableProps {
