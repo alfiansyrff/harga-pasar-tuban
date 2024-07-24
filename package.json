@@ -10,7 +10,11 @@
   },
   "dependencies": {
     "@tanstack/react-table": "^8.19.3",
+    "@types/d3": "^7.4.3",
     "axios": "^1.7.2",
+    "chart.js": "^4.4.3",
+    "chartjs": "^0.3.24",
+    "d3": "^7.9.0",
     "jsdom": "^24.1.0",
     "lodash": "^4.17.21",
     "moments": "^0.0.2",
@@ -23,6 +27,7 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@types/chart.js": "^2.9.41",
     "@types/node": "20.14.11",
     "@types/react": "18.3.3",
     "postcss": "^8",

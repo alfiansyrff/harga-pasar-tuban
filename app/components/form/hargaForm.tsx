@@ -37,7 +37,7 @@ const HargaForm: React.FC<HargaFormProps> = ({ handleData, handlePasar, handleTg
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.items);
+        // console.log(data.items);
         
         setData(data.items);
         handleData(data.items); 
