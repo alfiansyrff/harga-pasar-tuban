@@ -63,7 +63,7 @@ const HargaForm: React.FC<HargaFormProps> = ({ handleData, handlePasar, handleTg
       <form className='bg-white rounded-2xl shadow-md p-5' onSubmit={handleSubmit}>
         <h1 className='mb-4 border-b-2 text-xl border-blue-500'>Filter Data</h1>
         <div className='mb-2'>
-          <label htmlFor="tanggal" className="block mb-2 text-sm font-medium text-blue-500">Pilih Tanggal</label>
+          <label htmlFor="tanggal" className="block mb-0.5 text-sm font-medium text-blue-500">Pilih Tanggal</label>
           <div className="relative">
             <input
               type="date"
@@ -78,7 +78,7 @@ const HargaForm: React.FC<HargaFormProps> = ({ handleData, handlePasar, handleTg
         </div>
 
         <div className='mb-4'>
-          <label htmlFor="pasar" className="block mb-2 text-sm font-medium text-blue-500">Pilih Pasar</label>
+          <label htmlFor="pasar" className="block mb-0.5 text-sm font-medium text-blue-500">Pilih Pasar</label>
           <select
             id="pasar"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"

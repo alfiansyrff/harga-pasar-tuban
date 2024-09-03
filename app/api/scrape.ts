@@ -15,7 +15,7 @@ const getData = async () => {
   const dom = new JSDOM(data);
   const raceCards = dom.window.document.querySelectorAll(".jumbotron");
 
-  console.log(raceCards);
+  // console.log(raceCards);
   
   
   // Process raceCards as needed

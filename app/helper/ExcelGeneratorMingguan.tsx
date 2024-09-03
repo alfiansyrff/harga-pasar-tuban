@@ -1,25 +1,8 @@
-// import { utils, write, WorkBook, WorkSheet } from "xlsx";
-
-// function generateExcelData(data: { tanggal: string, items: any[] }[]) {
-//   const workbook: WorkBook = utils.book_new();
-
-//   data.forEach((dayData) => {
-//     const worksheet: WorkSheet = utils.json_to_sheet(dayData.items);
-//     utils.book_append_sheet(workbook, worksheet, dayData.tanggal);
-//   });
-
-//   const excelData = write(workbook, { bookType: 'xlsx', type: 'array' });
-//   return new Blob([excelData], { type: "application/octet-stream" });
-// }
-
-// export default generateExcelData;
-
 import { utils, write, WorkBook, WorkSheet } from "xlsx";
 
 interface Item {
   name: string;
   currentPrice: number;
-  // other fields can be included if necessary
 }
 
 interface DayData {
@@ -30,43 +13,28 @@ interface DayData {
 function generateExcelData(data: DayData[]): Blob {
   const workbook: WorkBook = utils.book_new();
   const worksheetData: any[][] = [];
-  const columnSpacing = 2; // Number of empty columns between each day's data
+  const columnSpacing = 0;
 
-  data.forEach((dayData, index) => {
-    const dayRows: any[][] = [
-      ['Name', 'Current Price'],
-      ...dayData.items.map(item => [item.name, item.currentPrice])
-    ];
+  const headerRow = ["Komoditas", ...data.map(dayData => dayData.tanggal)];
+  worksheetData.push(headerRow);
 
-    if (index === 0) {
-      // Initialize worksheetData with the first day's data
-      worksheetData.push([dayData.tanggal]);
-      dayRows.forEach((row, rowIndex) => {
-        if (worksheetData[rowIndex + 1] === undefined) {
-          worksheetData[rowIndex + 1] = [];
-        }
-        worksheetData[rowIndex + 1].push(...row);
-      });
-    } else {
-      // Calculate the starting column for this day's data
-      const startColumn = worksheetData[0].length + columnSpacing;
 
-      // Add date header in the correct position
-      worksheetData[0][startColumn] = dayData.tanggal;
+  const itemNames = data[0].items.map(item => item.name);
 
-      // Append each row's data to the correct position
-      dayRows.forEach((row, rowIndex) => {
-        if (worksheetData[rowIndex + 1] === undefined) {
-          worksheetData[rowIndex + 1] = [];
-        }
-        for (let i = 0; i < startColumn; i++) {
-          if (worksheetData[rowIndex + 1][i] === undefined) {
-            worksheetData[rowIndex + 1][i] = "";
-          }
-        }
-        worksheetData[rowIndex + 1].push(...row);
-      });
-    }
+  itemNames.forEach((itemName, itemIndex) => {
+    const rowData: any[] = [itemName]; 
+
+    let total = 0;
+    let count = 0;
+
+    data.forEach(dayData => {
+      const item = dayData.items[itemIndex];
+      rowData.push(item.currentPrice);
+      total += item.currentPrice;
+      count += 1;
+    });
+
+    worksheetData.push(rowData);
   });
 
   const worksheet: WorkSheet = utils.aoa_to_sheet(worksheetData);
