@@ -6,7 +6,7 @@ function downloadExcelFile(data: { tanggal: string, items: any[] }[]) {
   const link = document.createElement("a");
   const today = new Date().toLocaleDateString();
   link.href = url;
-  link.setAttribute("download", `harga-konsumen_${today}.xlsx`);
+  link.setAttribute("download", `SISKAPERBAPO_data_${today}.xlsx`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

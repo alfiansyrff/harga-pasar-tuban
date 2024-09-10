@@ -1,4 +1,6 @@
 
+  
+  
   // "use client";
 
   // import React, { useRef, useEffect } from 'react';
@@ -117,7 +119,7 @@
 //                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
 //                 borderColor: 'rgba(75, 192, 192, 1)',
 //                 borderWidth: 2,
-//                 fill: true,
+//                 // fill: true,
 //                 tension: 0.4,
 //                 // pointRadius: 0,
 //                 // pointHoverRadius: 0  
@@ -164,6 +166,7 @@
 
 // export default LineChart;
 
+
 'use client';
 
 import React, { useRef, useEffect } from 'react';
@@ -172,20 +175,30 @@ import { Chart, LineController, LineElement, PointElement, CategoryScale, Linear
 // Register necessary components and the Filler plugin
 Chart.register(LineController, LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend, Filler);
 
+interface Dataset {
+  label: string;
+  data: number[];
+  borderColor: string;
+  backgroundColor: string;
+  borderWidth: number;
+  fill: boolean;
+  tension: number;
+  pointRadius: number;
+  pointHoverRadius: number;
+}
+
 interface LineChartProps {
   data: {
     labels: string[];
-    values: number[];
-    variant: string,
+    datasets: Dataset[];
   };
 }
 
 const LineChart: React.FC<LineChartProps> = ({ data }) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
-  const chartInstanceRef = useRef<Chart | null>(null);
+  const chartInstanceRef = useRef<Chart<'line'> | null>(null);
 
   useEffect(() => {
-    
     if (chartRef.current) {
       const ctx = chartRef.current.getContext('2d');
       if (ctx) {
@@ -197,19 +210,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
           type: 'line',
           data: {
             labels: data.labels,
-            datasets: [
-              {
-                label: `Harga ${data.variant}`,
-                data: data.values,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 2,
-                fill: true,
-                tension: 0.4, 
-                pointRadius: 0, 
-                pointHoverRadius: 0,
-              },
-            ],
+            datasets: data.datasets,
           },
           options: {
             responsive: true,
@@ -224,14 +225,14 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
             },
             scales: {
               x: {
-                beginAtZero: false,
+                beginAtZero: true,
                 title: {
                   display: true,
                   text: 'Tanggal',
                 },
               },
               y: {
-                beginAtZero: false,
+                beginAtZero: true,
                 title: {
                   display: true,
                   text: 'Harga (Rp.)',

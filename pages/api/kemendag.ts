@@ -60,7 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       formData.append('start_date', start_date); 
       formData.append('end_date', end_date); 
       formData.append('level', '3');
-      formData.append('variant_ids', '');
+      formData.append('variant_ids', variant_id);
       formData.append('kode_provinsi', '35');
       formData.append('kode_kab_kota', '3523');
       formData.append('pasar_id', '449');
