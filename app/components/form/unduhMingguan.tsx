@@ -781,9 +781,14 @@ const UnduhMingguan: React.FC<UnduhMingguanProps> = ({ handleDataMingguan }) => 
           .filter(item => item.name === komoditas)
           .map(item => ({ tanggal: result.tanggal,  harga: parseInt(item.currentPrice.replace(/\./g, ''), 10)}))
       );
-      berasPremiumPrice.variant = "Cabe Rawit Merah";
+      // berasPremiumPrice.variant = "Cabe Rawit Merah";
+      const resultWithVariant = {
+        berasPremiumPrice,
+        variant: komoditas
+      };
 
-      return berasPremiumPrice;
+      // return berasPremiumPrice;
+      return resultWithVariant;
      
   
   
@@ -884,7 +889,7 @@ const UnduhMingguan: React.FC<UnduhMingguanProps> = ({ handleDataMingguan }) => 
     const sp2kp = await fetchSp2kData();
     const siska = await fetchData();
     setLoading(false);
-    const data = [sp2kp, siska];
+    const data = [sp2kp, siska?.berasPremiumPrice];
     handleDataMingguan(data);
     // return data;
     // console.log(data);
@@ -992,7 +997,7 @@ const UnduhMingguan: React.FC<UnduhMingguanProps> = ({ handleDataMingguan }) => 
                   }
                 }}
               >
-                <option value="">Semua Komoditas</option>
+                <option value="" disabled>Semua Komoditas</option>
                 {komoditasData.map((item, idx) => (
                   <option key={idx} value={item.variant_id}>
                     {item.label}

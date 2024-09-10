@@ -191,6 +191,7 @@ interface LineChartProps {
   data: {
     labels: string[];
     datasets: Dataset[];
+    variant: string;
   };
 }
 
